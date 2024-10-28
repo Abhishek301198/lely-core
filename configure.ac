@@ -439,110 +439,110 @@ AC_CHECK_HEADER([valgrind/valgrind.h], [
 
 AM_CONDITIONAL([HAVE_IXXAT], [false])
 AM_CONDITIONAL([HAVE_VCI], [false])
-AS_IF([test "$platform_win32" == "no"], [
-	CFLAGS="$CFLAGS -std=c99 -Wno-error=attributes"
-
-	AC_ARG_WITH([ixxat],
-		[AS_HELP_STRING(
-			[--with-ixxat@<:@=DIR@:>@],
-			[search for the IXXAT VCI SDK (in DIR if specified)]
-		)],,
-		[with_ixxat=no]
-	)
-	AS_IF([test "$with_ixxat" != "no"], [
-		save_CPPFLAGS="$CPPFLAGS"
-		AS_IF([test "$with_ixxat" != "yes"], [
-			CPPFLAGS="$CPPFLAGS -I$with_ixxat/inc"
-		])
-		AM_COND_IF([NO_CANFD], [
-			ixxat_header="vcinpl.h"
-		], [
-			ixxat_header="vcinpl2.h"
-		])
-		AC_CHECK_HEADERS($ixxat_header, [
-			AM_CONDITIONAL([HAVE_IXXAT], [true])
-			AC_DEFINE([LELY_HAVE_IXXAT], [1], [Define to 1 if you have the IXXAT VCI SDK.])
-		], [
-			CPPFLAGS="$save_CPPFLAGS"
-		], [
-			#include <windows.h>
-			#define _MSC_VER 1900
-		])
-	])
-
-	AC_MSG_CHECKING([for PathRemoveFileSpecA in shlwapi])
-	ax_shlwapi_ok=no
-	save_LIBS=$LIBS
-	LIBS="-lshlwapi $LIBS"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM(
-			[[
-				#include <windows.h>
-				#include <shlwapi.h>
-			]],
-			[[PathRemoveFileSpecA(NULL);]])],
-		[ax_shlwapi_ok=yes], [LIBS=$save_LIBS])
-	AC_MSG_RESULT([$ax_shlwapi_ok])
-
-	AC_MSG_CHECKING([for WTSSendMessage in wtsapi32])
-	ax_wtsapi32_ok=no
-	save_LIBS=$LIBS
-	LIBS="-lwtsapi32 $LIBS"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM(
-			[[
-				#include <windows.h>
-				#include <wtsapi32.h>
-			]],
-			[[WTSSendMessage(WTS_CURRENT_SERVER_HANDLE, 0, NULL, 0, NULL, 0, 0, 0, NULL, FALSE);]])],
-		[ax_wtsapi32_ok=yes], [LIBS=$save_LIBS])
-	AC_MSG_RESULT([$ax_wtsapi32_ok])
-
-	AC_ARG_WITH([vci],
-		[AS_HELP_STRING(
-			[--with-vci@<:@=DIR@:>@],
-			[search for the IXXAT VCI SDK (in DIR if specified)]
-		)],,
-		[with_vci=no]
-	)
-	AS_IF([test "$with_vci" != "no"], [
-		save_CPPFLAGS="$CPPFLAGS"
-		AS_IF([test "$with_vci" != "yes"], [
-			CPPFLAGS="$CPPFLAGS -I$with_vci/inc"
-		])
-		AC_CHECK_HEADERS([cantype.h], [
-			AM_CONDITIONAL([HAVE_VCI], [true])
-			AC_DEFINE([LELY_HAVE_VCI], [1], [Define to 1 if you have the IXXAT VCI SDK.])
-		], [
-			CPPFLAGS=$save_CPPFLAGS
-		], [
-			#include <windows.h>
-			#define _MSC_VER 1900
-		])
-	])
-
-	AC_MSG_CHECKING([for WSAGetLastError in ws2_32])
-	ax_winsock_ok=no
-	save_LIBS=$LIBS
-	LIBS="-lws2_32 $LIBS"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM(
-			[[#include <winsock2.h>]],
-			[[WSAGetLastError();]])],
-		[ax_winsock_ok=yes], [LIBS=$save_LIBS])
-	AC_MSG_RESULT([$ax_winsock_ok])
-
-	AC_MSG_CHECKING([for GetAdaptersAddresses in iphlpapi])
-	ax_iphlpapi_ok=no
-	save_LIBS=$LIBS
-	LIBS="-liphlpapi $LIBS"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM(
-			[[
-				#include <ws2tcpip.h>
-				#include <iphlpapi.h>
-			]], [[GetAdaptersAddresses(0, 0, NULL, NULL, NULL);]])],
-		[ax_iphlpapi_ok=yes], [LIBS=$save_LIBS])
-	AC_MSG_RESULT([$ax_iphlpapi_ok])
-
-	LDFLAGS="$LDFLAGS -Wc,-static-libgcc,-static-libstdc++"
-])
+#AS_IF([test "$platform_win32" == "yes"], [
+#	CFLAGS="$CFLAGS -std=c99 -Wno-error=attributes"
+#
+#	AC_ARG_WITH([ixxat],
+#		[AS_HELP_STRING(
+#			[--with-ixxat@<:@=DIR@:>@],
+#			[search for the IXXAT VCI SDK (in DIR if specified)]
+#		)],,
+#		[with_ixxat=no]
+#	)
+#	AS_IF([test "$with_ixxat" != "no"], [
+#		save_CPPFLAGS="$CPPFLAGS"
+#		AS_IF([test "$with_ixxat" != "yes"], [
+#			CPPFLAGS="$CPPFLAGS -I$with_ixxat/inc"
+#		])
+#		AM_COND_IF([NO_CANFD], [
+#			ixxat_header="vcinpl.h"
+#		], [
+#			ixxat_header="vcinpl2.h"
+#		])
+#		AC_CHECK_HEADERS($ixxat_header, [
+#			AM_CONDITIONAL([HAVE_IXXAT], [true])
+#			AC_DEFINE([LELY_HAVE_IXXAT], [1], [Define to 1 if you have the IXXAT VCI SDK.])
+#		], [
+#			CPPFLAGS="$save_CPPFLAGS"
+#		], [
+#			#include <windows.h>
+#			#define _MSC_VER 1900
+#		])
+#	])
+#
+#	AC_MSG_CHECKING([for PathRemoveFileSpecA in shlwapi])
+#	ax_shlwapi_ok=no
+#	save_LIBS=$LIBS
+#	LIBS="-lshlwapi $LIBS"
+#	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+#			[[
+#				#include <windows.h>
+#				#include <shlwapi.h>
+#			]],
+#			[[PathRemoveFileSpecA(NULL);]])],
+#		[ax_shlwapi_ok=yes], [LIBS=$save_LIBS])
+#	AC_MSG_RESULT([$ax_shlwapi_ok])
+#
+#	AC_MSG_CHECKING([for WTSSendMessage in wtsapi32])
+#	ax_wtsapi32_ok=no
+#	save_LIBS=$LIBS
+#	LIBS="-lwtsapi32 $LIBS"
+#	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+#			[[
+#				#include <windows.h>
+#				#include <wtsapi32.h>
+#			]],
+#			[[WTSSendMessage(WTS_CURRENT_SERVER_HANDLE, 0, NULL, 0, NULL, 0, 0, 0, NULL, FALSE);]])],
+#		[ax_wtsapi32_ok=yes], [LIBS=$save_LIBS])
+#	AC_MSG_RESULT([$ax_wtsapi32_ok])
+#
+#	AC_ARG_WITH([vci],
+#		[AS_HELP_STRING(
+#			[--with-vci@<:@=DIR@:>@],
+#			[search for the IXXAT VCI SDK (in DIR if specified)]
+#		)],,
+#		[with_vci=no]
+#	)
+#	AS_IF([test "$with_vci" != "no"], [
+#		save_CPPFLAGS="$CPPFLAGS"
+#		AS_IF([test "$with_vci" != "yes"], [
+#			CPPFLAGS="$CPPFLAGS -I$with_vci/inc"
+#		])
+#		AC_CHECK_HEADERS([cantype.h], [
+#			AM_CONDITIONAL([HAVE_VCI], [true])
+#			AC_DEFINE([LELY_HAVE_VCI], [1], [Define to 1 if you have the IXXAT VCI SDK.])
+#		], [
+#			CPPFLAGS=$save_CPPFLAGS
+#		], [
+#			#include <windows.h>
+#			#define _MSC_VER 1900
+#		])
+#	])
+#
+#	AC_MSG_CHECKING([for WSAGetLastError in ws2_32])
+#	ax_winsock_ok=no
+#	save_LIBS=$LIBS
+#	LIBS="-lws2_32 $LIBS"
+#	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+#			[[#include <winsock2.h>]],
+#			[[WSAGetLastError();]])],
+#		[ax_winsock_ok=yes], [LIBS=$save_LIBS])
+#	AC_MSG_RESULT([$ax_winsock_ok])
+#
+#	AC_MSG_CHECKING([for GetAdaptersAddresses in iphlpapi])
+#	ax_iphlpapi_ok=no
+#	save_LIBS=$LIBS
+#	LIBS="-liphlpapi $LIBS"
+#	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+#			[[
+#				#include <ws2tcpip.h>
+#				#include <iphlpapi.h>
+#			]], [[GetAdaptersAddresses(0, 0, NULL, NULL, NULL);]])],
+#		[ax_iphlpapi_ok=yes], [LIBS=$save_LIBS])
+#	AC_MSG_RESULT([$ax_iphlpapi_ok])
+#
+#	LDFLAGS="$LDFLAGS -Wc,-static-libgcc,-static-libstdc++"
+#])
 
 AM_CONDITIONAL([HAVE_SOCKET_CAN], [false])
 AS_IF([test "$platform_linux" == "yes"], [
