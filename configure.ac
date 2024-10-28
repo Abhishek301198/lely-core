@@ -439,7 +439,7 @@ AC_CHECK_HEADER([valgrind/valgrind.h], [
 
 AM_CONDITIONAL([HAVE_IXXAT], [false])
 AM_CONDITIONAL([HAVE_VCI], [false])
-AS_IF([test "$platform_win32" == "yes"], [
+AS_IF([test "$platform_win32" == "no"], [
 	CFLAGS="$CFLAGS -std=c99 -Wno-error=attributes"
 
 	AC_ARG_WITH([ixxat],
